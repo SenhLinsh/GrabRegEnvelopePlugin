@@ -5,9 +5,9 @@ import android.graphics.Point;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.linsh.lshutils.viewHelper.WindowManagerFloatHelper;
-import com.linsh.lshutils.viewHelper.WindowManagerHelper;
-import com.linsh.lshutils.viewHelper.WindowManagerViewHelper;
+import com.linsh.lshutils.helper.wm.WindowManagerFloatHelper;
+import com.linsh.lshutils.helper.wm.WindowManagerHelper;
+import com.linsh.lshutils.helper.wm.WindowManagerViewHelper;
 import com.linsh.utilseverywhere.BackgroundUtils;
 import com.linsh.utilseverywhere.ScreenUtils;
 import com.linsh.utilseverywhere.ViewUtils;
