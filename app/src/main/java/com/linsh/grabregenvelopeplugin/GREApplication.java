@@ -2,7 +2,6 @@ package com.linsh.grabregenvelopeplugin;
 
 import android.app.Application;
 
-import com.linsh.lshutils.viewHelper.WindowManagerHelper;
 import com.linsh.utilseverywhere.Utils;
 
 /**
@@ -15,16 +14,9 @@ import com.linsh.utilseverywhere.Utils;
  */
 public class GREApplication extends Application {
 
-    private static WindowManagerHelper mWindowManagerHelper;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
-        mWindowManagerHelper = new WindowManagerHelper();
-    }
-
-    public static WindowManagerHelper getWindowManagerHelper() {
-        return mWindowManagerHelper;
     }
 }

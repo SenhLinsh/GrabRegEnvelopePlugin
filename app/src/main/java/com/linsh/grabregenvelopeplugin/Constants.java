@@ -10,7 +10,15 @@ package com.linsh.grabregenvelopeplugin;
  */
 public class Constants {
 
-    public static final String UI_MAIN = "com.tencent.mm.ui.LauncherUI";
-    public static final String UI_LUCKY_MONEY_OPEN = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI";
-    public static final String UI_LUCKY_MONEY_DETAIL = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI";
+    public static final String UI_MAIN;
+    public static final String UI_LUCKY_MONEY_OPEN;
+    public static final String UI_LUCKY_MONEY_DETAIL;
+    public static final int TIME_EXIT_LUCKY_MONEY_UI;
+
+    static {
+        UI_MAIN = "com.tencent.mm.ui.LauncherUI";
+        UI_LUCKY_MONEY_OPEN = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI";
+        UI_LUCKY_MONEY_DETAIL = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI";
+        TIME_EXIT_LUCKY_MONEY_UI = 3000;
+    }
 }
