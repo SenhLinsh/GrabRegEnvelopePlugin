@@ -1,16 +1,24 @@
-package com.linsh.grabregenvelopeplugin;
+package com.linsh.grabregenvelopeplugin.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.linsh.grabregenvelopeplugin.R;
+import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
+import com.linsh.grabregenvelopeplugin.service.NotificationService;
 import com.linsh.lshutils.helper.wm.WindowManagerFloatHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerViewHelper;
 import com.linsh.utilseverywhere.BackgroundUtils;
 import com.linsh.utilseverywhere.ScreenUtils;
+import com.linsh.utilseverywhere.ServiceUtils;
 import com.linsh.utilseverywhere.ViewUtils;
+import com.linsh.views.preference.TogglePreference;
 
 /**
  * <pre>
@@ -33,12 +41,12 @@ public class GREWindowManagerHelper {
         return mWindowManagerHelper;
     }
 
-    public void showFloatingView(Context context) {
+    public void showFloatingView(final Context context) {
         if (mWindowManagerHelper.getViewCount() == 0) {
             WindowManagerViewHelper floatingViewHelper = new WindowManagerViewHelper(context, R.layout.layout_floating_btn)
                     .setLocation(ScreenUtils.getScreenWidth() / 2, ScreenUtils.getScreenHeight() / 2)
                     .addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            View floatingView = floatingViewHelper.getView();
+            final View floatingView = floatingViewHelper.getView();
             WindowManagerFloatHelper floatingHelper = new WindowManagerFloatHelper(floatingView, true, 0.3f);
             mWindowManagerHelper.addView(floatingViewHelper);
             mWindowManagerHelper.addFloat(floatingHelper);
@@ -52,6 +60,7 @@ public class GREWindowManagerHelper {
                         mWindowManagerHelper.addView(settingViewHelper);
                         View tvDismiss = settingView.findViewById(R.id.tv_dismiss);
                         View tvExit = settingView.findViewById(R.id.tv_exit);
+                        final TogglePreference tpToggleNotify = settingView.findViewById(R.id.tp_toggle_notification_service);
                         BackgroundUtils.addPressedEffect(tvDismiss);
                         BackgroundUtils.addPressedEffect(tvExit);
                         tvDismiss.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +73,23 @@ public class GREWindowManagerHelper {
                             @Override
                             public void onClick(View v) {
                                 mWindowManagerHelper.removeAllViews();
+                                ServiceUtils.stopService(GREAccessibilityService1.class);
+                            }
+                        });
+                        tpToggleNotify.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                tpToggleNotify.detail().toggel();
+                                boolean toggleOn = tpToggleNotify.detail().isToggleOn();
+                                if (toggleOn) {
+                                    String string = Settings.Secure.getString(v.getContext().getContentResolver(),
+                                            "enabled_notification_listeners");
+                                    if (!string.contains(NotificationService.class.getName())) {
+                                        v.getContext().startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                                    }
+                                } else {
+                                    ServiceUtils.stopService(NotificationService.class);
+                                }
                             }
                         });
                     }

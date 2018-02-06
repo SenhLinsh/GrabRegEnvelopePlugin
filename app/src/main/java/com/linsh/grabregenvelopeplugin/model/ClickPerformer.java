@@ -6,7 +6,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 
-import com.linsh.grabregenvelopeplugin.GREAccessibilityService7;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
 import com.linsh.utilseverywhere.HandlerUtils;
 import com.linsh.utilseverywhere.ToastUtils;
 
@@ -20,7 +20,7 @@ import com.linsh.utilseverywhere.ToastUtils;
  */
 public class ClickPerformer implements Runnable {
 
-    private GREAccessibilityService7 mService;
+    private GREAccessibilityService1 mService;
     private Point mPoint;
     private String mActivityName;
     private int mTimes;
@@ -28,7 +28,7 @@ public class ClickPerformer implements Runnable {
     private String key;
     private int interval;
 
-    public ClickPerformer(GREAccessibilityService7 service, Point point, String activityName) {
+    public ClickPerformer(GREAccessibilityService1 service, Point point, String activityName) {
         mService = service;
         mPoint = point;
         mActivityName = activityName;
@@ -37,7 +37,7 @@ public class ClickPerformer implements Runnable {
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void run() {
-        if (mActivityName.equals(GREAccessibilityService7.sCurActivityName)) {
+        if (mActivityName.equals(GREAccessibilityService1.sCurActivityName)) {
             Path path = new Path();
             path.moveTo(mPoint.x, mPoint.y);
             GestureDescription gesture = new GestureDescription.Builder()

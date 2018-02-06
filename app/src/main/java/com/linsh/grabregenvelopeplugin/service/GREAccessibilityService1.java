@@ -1,4 +1,4 @@
-package com.linsh.grabregenvelopeplugin;
+package com.linsh.grabregenvelopeplugin.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -7,17 +7,20 @@ import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.linsh.grabregenvelopeplugin.BuildConfig;
+import com.linsh.grabregenvelopeplugin.common.Constants;
 import com.linsh.grabregenvelopeplugin.model.ClickPerformer;
 import com.linsh.grabregenvelopeplugin.page.UIChat;
 import com.linsh.grabregenvelopeplugin.page.UILuckyMoneyDetail;
 import com.linsh.grabregenvelopeplugin.page.UILuckyMoneyReceive;
 import com.linsh.grabregenvelopeplugin.page.UINotification;
+import com.linsh.grabregenvelopeplugin.ui.GREWindowManagerHelper;
 import com.linsh.utilseverywhere.HandlerUtils;
 import com.linsh.utilseverywhere.LogUtils;
 import com.linsh.utilseverywhere.ToastUtils;
 import com.linsh.utilseverywhere.tools.AccessibilityHelper;
 
-public class GREAccessibilityService7 extends AccessibilityService {
+public class GREAccessibilityService1 extends AccessibilityService {
 
     public static String sCurActivityName;
 
@@ -57,6 +60,7 @@ public class GREAccessibilityService7 extends AccessibilityService {
         String className = event.getClassName().toString();
         String packageName = event.getPackageName().toString();
         LogUtils.i("onAccessibilityEvent:", "eventType = " + typeToString, "PackageName = " + packageName, "className = " + className);
+        LogUtils.i("allTexts", mHelper.findAllTexts(event.getSource()));
         switch (eventType) {
             // 通知栏状态改变
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:

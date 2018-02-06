@@ -2,7 +2,7 @@ package com.linsh.grabregenvelopeplugin.page;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.linsh.grabregenvelopeplugin.GREAccessibilityService7;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
 import com.linsh.utilseverywhere.ToastUtils;
 import com.linsh.utilseverywhere.tools.AccessibilityHelper;
 
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class UIChat {
 
-    public static void findPackets(GREAccessibilityService7 service, AccessibilityHelper helper) {
+    public static void findPackets(GREAccessibilityService1 service, AccessibilityHelper helper) {
         AccessibilityNodeInfo rootNode = service.getRootInActiveWindow();
         List<AccessibilityNodeInfo> parents = new ArrayList<>();
         recycle(parents, rootNode);

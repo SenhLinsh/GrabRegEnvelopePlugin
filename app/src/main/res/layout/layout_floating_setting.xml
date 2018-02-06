@@ -34,6 +34,15 @@
             app:titleTextSize="@dimen/text_normal"
             app:toggleOn="false"/>
 
+        <com.linsh.views.preference.TogglePreference
+            android:id="@+id/tp_toggle_notification_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleText="如果监听通知栏失败了, 就尝试打开我 !"
+            app:titleTextColor="@color/text_normal"
+            app:titleTextSize="@dimen/text_normal"
+            app:toggleOn="false"/>
+
     </LinearLayout>
 
     <TextView

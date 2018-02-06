@@ -1,4 +1,4 @@
-package com.linsh.grabregenvelopeplugin;
+package com.linsh.grabregenvelopeplugin.common;
 
 /**
  * <pre>

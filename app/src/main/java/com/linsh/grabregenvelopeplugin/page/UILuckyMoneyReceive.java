@@ -4,9 +4,9 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.linsh.grabregenvelopeplugin.ConfigHelper;
-import com.linsh.grabregenvelopeplugin.Constants;
-import com.linsh.grabregenvelopeplugin.GREAccessibilityService7;
+import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
+import com.linsh.grabregenvelopeplugin.common.Constants;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
 import com.linsh.grabregenvelopeplugin.model.ClickPerformer;
 import com.linsh.utilseverywhere.LogUtils;
 import com.linsh.utilseverywhere.ToastUtils;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class UILuckyMoneyReceive {
 
-    public static void openLuckyMoney(GREAccessibilityService7 service, AccessibilityHelper helper) {
+    public static void openLuckyMoney(GREAccessibilityService1 service, AccessibilityHelper helper) {
         checkOpenLuckyMonkeyBtn(helper);
         List<String> allTexts = helper.findAllTexts();
         LogUtils.i("allTexts size=" + allTexts.size(), allTexts);

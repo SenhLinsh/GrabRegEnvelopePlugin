@@ -2,6 +2,7 @@ package com.linsh.grabregenvelopeplugin.page;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.service.notification.StatusBarNotification;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.linsh.utilseverywhere.ToastUtils;
@@ -38,6 +39,20 @@ public class UINotification {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public static void onNotificationPosted(StatusBarNotification sbn) {
+        String text = sbn.getNotification().tickerText.toString();
+        if (text.contains("[微信红包]")) {
+            Notification notification = sbn.getNotification();
+            PendingIntent pendingIntent = notification.contentIntent;
+            try {
+                pendingIntent.send();
+                ToastUtils.show("发现目标 ヾ(≧∇≦*)ゝ 火速赶往现场 ~");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
