@@ -1,16 +1,40 @@
 package com.linsh.grabregenvelopeplugin.service;
 
+import android.content.Intent;
 import android.os.Build;
+import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
+import com.linsh.grabregenvelopeplugin.common.Config;
 import com.linsh.grabregenvelopeplugin.page.UINotification;
 import com.linsh.utilseverywhere.LogUtils;
 
 public class NotificationService extends NotificationListenerService {
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i("LshLog", "NotificationService onCreate: ");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("LshLog", "NotificationService onStartCommand: ");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.i("LshLog", "NotificationService onBind: ");
+        return super.onBind(intent);
+    }
+
+    @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if (Config.isExit) return;
+        Log.i("LshLog", "NotificationService onNotificationPosted: ");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if ("com.tencent.mm".equals(sbn.getPackageName())) {
                 UINotification.onNotificationPosted(sbn);

@@ -32,8 +32,8 @@ public class UINotification {
                         Notification notification = (Notification) event.getParcelableData();
                         PendingIntent pendingIntent = notification.contentIntent;
                         try {
-                            pendingIntent.send();
                             ToastUtils.show("发现目标 ヾ(≧∇≦*)ゝ 火速赶往现场 ~");
+                            pendingIntent.send();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -49,8 +49,8 @@ public class UINotification {
             Notification notification = sbn.getNotification();
             PendingIntent pendingIntent = notification.contentIntent;
             try {
-                pendingIntent.send();
                 ToastUtils.show("发现目标 ヾ(≧∇≦*)ゝ 火速赶往现场 ~");
+                pendingIntent.send();
             } catch (Exception e) {
                 e.printStackTrace();
             }

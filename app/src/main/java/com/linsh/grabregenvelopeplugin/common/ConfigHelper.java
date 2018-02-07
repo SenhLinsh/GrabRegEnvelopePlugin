@@ -17,21 +17,14 @@ import com.linsh.utilseverywhere.UnitConverseUtils;
 public class ConfigHelper {
 
     public static final String KEY_OPEN_LUCKY_MONEY_LOCATION = "open_lucky_money_location";
+    public static final String KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION = "show_lucky_money_detail_location";
     public static final String KEY_EXIT_LUCKY_MONEY_DETAIL_LOCATION = "exit_lucky_money_detail_location";
-
-    private static String sAimGroupChat;
     private static Point sOpenLuckyMoneyLocation;
+    private static Point sCloseLuckyMoneyLocation;
     private static Point sExitLuckyMoneyDetailLocation;
     private static boolean requireOpenLuckyMoneyLocation;
+    private static boolean requireCloseLuckyMoneyLocation;
     private static boolean requireExitLuckyMoneyDetailLocation;
-
-    public static String getAimGroupChat() {
-        return sAimGroupChat;
-    }
-
-    public static void setAimGroupChat(String aimGroupChat) {
-        sAimGroupChat = aimGroupChat;
-    }
 
     public static Point getOpenLuckyMoneyLocation() {
         if (sOpenLuckyMoneyLocation == null) {
@@ -67,6 +60,22 @@ public class ConfigHelper {
         return requireExitLuckyMoneyDetailLocation;
     }
 
+    public static Point getCloseLuckyMoneyOpenLocation() {
+        if (sCloseLuckyMoneyLocation == null) {
+            int location = SharedPreferenceUtils.getInt(KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION);
+            if (location > 0) {
+                sCloseLuckyMoneyLocation = new Point(location / 10000, location % 10000);
+            } else {
+                requireCloseLuckyMoneyLocation = true;
+            }
+        }
+        return sCloseLuckyMoneyLocation;
+    }
+
+    public static boolean isRequireCloseLuckyMoneyOpenLocation() {
+        return requireCloseLuckyMoneyLocation;
+    }
+
     public static void saveLocation(String key, Point point) {
         switch (key) {
             case KEY_OPEN_LUCKY_MONEY_LOCATION:
@@ -76,6 +85,8 @@ public class ConfigHelper {
                 sExitLuckyMoneyDetailLocation = point;
                 break;
         }
-        SharedPreferenceUtils.putInt(key, point.x * 10000 + point.y);
+        SharedPreferenceUtils.putInt(key, point != null ? (point.x * 10000 + point.y) : 0);
     }
+
+
 }

@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
 import com.linsh.lshutils.utils.Permission;
 import com.linsh.utilseverywhere.ADBUtils;
 import com.linsh.utilseverywhere.IntentUtils;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkRoot() {
         if (ADBUtils.checkRoot()) {
-            CommandResult result = ADBUtils.startAccessibilityService(getPackageName(), GREAccessibilityService1.class.getName());
+            CommandResult result = ADBUtils.startAccessibilityService(getPackageName(), GREAccessibilityService5.class.getName());
             Log.i("LshLog", "checkRoot Result: successMsg=" + result.successMsg + "    errorMsg=" + result.errorMsg);
             runServiceIfNotRunning();
         } else {
@@ -54,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runServiceIfNotRunning() {
-        boolean running = ServiceUtils.isRunning(GREAccessibilityService1.class);
+        boolean running = ServiceUtils.isRunning(GREAccessibilityService5.class);
         if (!running) {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
             ToastUtils.showLong("((*・∀・）ゞ→→ 需要打开自动模式");
+        } else {
+            ServiceUtils.startService(GREAccessibilityService5.class);
         }
     }
 

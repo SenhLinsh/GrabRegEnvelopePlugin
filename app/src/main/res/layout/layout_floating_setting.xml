@@ -8,42 +8,98 @@
     android:layout_height="wrap_content"
     android:background="#e333">
 
-    <LinearLayout
-        android:id="@+id/ll_panel"
+    <ScrollView
+        android:id="@+id/sl_panel"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_marginTop="20dp"
-        android:divider="@drawable/shape_divider_light"
-        android:orientation="vertical"
-        android:showDividers="beginning|middle|end"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginTop="20dp">
 
-        <com.linsh.views.preference.TogglePreference
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleText="这个群是大头, 其他群的红包我不管了!"
-            app:titleTextColor="@color/text_normal"
-            app:titleTextSize="@dimen/text_normal"
-            app:toggleOn="false"/>
+            android:layout_height="match_parent"
+            android:divider="@drawable/shape_divider_light"
+            android:orientation="vertical"
+            android:showDividers="beginning|middle|end"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.linsh.views.preference.TogglePreference
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleText="让我默默抢红包之前记得保持屏幕常亮~"
-            app:titleTextColor="@color/text_normal"
-            app:titleTextSize="@dimen/text_normal"
-            app:toggleOn="false"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#9333"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="设置"
+                android:textColor="@color/text_normal"
+                android:textSize="@dimen/text_title2"/>
 
-        <com.linsh.views.preference.TogglePreference
-            android:id="@+id/tp_toggle_notification_service"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleText="如果监听通知栏失败了, 就尝试打开我 !"
-            app:titleTextColor="@color/text_normal"
-            app:titleTextSize="@dimen/text_normal"
-            app:toggleOn="false"/>
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_setting_focus_on_current_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="不监听通知栏消息"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
 
-    </LinearLayout>
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_setting_keep_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="让我默默抢红包之前记得保持屏幕常亮~"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
+
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_toggle_notification_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="如果监听通知栏失败了, 就尝试打开我 !"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#9333"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="位置调试"
+                android:textColor="@color/text_normal"
+                android:textSize="@dimen/text_title2"/>
+
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_check_open_lucky_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="红包界面 - 『開』"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
+
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_check_close_lucky_monkey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="红包界面 - 关闭"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
+
+            <com.linsh.views.preference.TogglePreference
+                android:id="@+id/tp_check_exit_lucky_monkey_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleText="红包详情界面 - 返回"
+                app:titleTextColor="@color/text_normal"
+                app:titleTextSize="@dimen/text_normal"
+                app:toggleOn="false"/>
+        </LinearLayout>
+
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_dismiss"
@@ -57,7 +113,7 @@
         android:textSize="@dimen/text_title"
         app:layout_constraintRight_toLeftOf="@id/tv_exit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_panel"/>
+        app:layout_constraintTop_toBottomOf="@id/sl_panel"/>
 
     <TextView
         android:id="@+id/tv_exit"

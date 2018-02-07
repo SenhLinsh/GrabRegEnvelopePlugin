@@ -8,17 +8,20 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.linsh.grabregenvelopeplugin.R;
+import com.linsh.grabregenvelopeplugin.common.Config;
 import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
 import com.linsh.grabregenvelopeplugin.service.NotificationService;
+import com.linsh.grabregenvelopeplugin.viewHelper.FloatingViewHelper;
+import com.linsh.grabregenvelopeplugin.viewHelper.SettingViewHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerFloatHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerViewHelper;
-import com.linsh.utilseverywhere.BackgroundUtils;
+import com.linsh.lshutils.tools.PowerHelper;
+import com.linsh.utilseverywhere.ContextUtils;
 import com.linsh.utilseverywhere.ScreenUtils;
 import com.linsh.utilseverywhere.ServiceUtils;
 import com.linsh.utilseverywhere.ViewUtils;
-import com.linsh.views.preference.TogglePreference;
 
 /**
  * <pre>
@@ -32,6 +35,7 @@ public class GREWindowManagerHelper {
 
     private WindowManagerHelper mWindowManagerHelper;
     private View mLocationView;
+    private PowerHelper mPowerHelper;
 
     public GREWindowManagerHelper() {
         mWindowManagerHelper = new WindowManagerHelper();
@@ -43,52 +47,80 @@ public class GREWindowManagerHelper {
 
     public void showFloatingView(final Context context) {
         if (mWindowManagerHelper.getViewCount() == 0) {
-            WindowManagerViewHelper floatingViewHelper = new WindowManagerViewHelper(context, R.layout.layout_floating_btn)
-                    .setLocation(ScreenUtils.getScreenWidth() / 2, ScreenUtils.getScreenHeight() / 2)
-                    .addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            final View floatingView = floatingViewHelper.getView();
-            WindowManagerFloatHelper floatingHelper = new WindowManagerFloatHelper(floatingView, true, 0.3f);
-            mWindowManagerHelper.addView(floatingViewHelper);
-            mWindowManagerHelper.addFloat(floatingHelper);
-            floatingView.setOnClickListener(new View.OnClickListener() {
+            FloatingViewHelper floatingViewHelper = new FloatingViewHelper(context);
+            floatingViewHelper.addViewToWindowManagerHelper(mWindowManagerHelper);
+            floatingViewHelper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mWindowManagerHelper.getViewCount() == 1) {
-                        WindowManagerViewHelper settingViewHelper = new WindowManagerViewHelper(v.getContext(), R.layout.layout_floating_setting)
-                                .setWidth(WindowManager.LayoutParams.MATCH_PARENT);
-                        final View settingView = settingViewHelper.getView();
-                        mWindowManagerHelper.addView(settingViewHelper);
-                        View tvDismiss = settingView.findViewById(R.id.tv_dismiss);
-                        View tvExit = settingView.findViewById(R.id.tv_exit);
-                        final TogglePreference tpToggleNotify = settingView.findViewById(R.id.tp_toggle_notification_service);
-                        BackgroundUtils.addPressedEffect(tvDismiss);
-                        BackgroundUtils.addPressedEffect(tvExit);
-                        tvDismiss.setOnClickListener(new View.OnClickListener() {
+                        SettingViewHelper settingViewHelper = new SettingViewHelper(v.getContext());
+                        settingViewHelper.addView(mWindowManagerHelper);
+                        settingViewHelper.toggleIgnoreNotification(Config.isNotificationIgnored);
+                        settingViewHelper.toggleKeepLight(mPowerHelper != null);
+                        settingViewHelper.toggleCheckOpenLuckyMoney(ConfigHelper.isRequireOpenLuckyMoneyLocation());
+                        settingViewHelper.toggleCheckCloseLuckyMoney(ConfigHelper.isRequireCloseLuckyMoneyOpenLocation());
+                        settingViewHelper.toggleCheckExitLuckyMoneyDetail(ConfigHelper.isRequireExitLuckyMoneyDetailLocation());
+                        settingViewHelper.setViewHelperListener(new SettingViewHelper.ViewHelperListener() {
                             @Override
-                            public void onClick(View v) {
+                            public void dismiss() {
                                 mWindowManagerHelper.removeView(1);
                             }
-                        });
-                        tvExit.setOnClickListener(new View.OnClickListener() {
+
                             @Override
-                            public void onClick(View v) {
-                                mWindowManagerHelper.removeAllViews();
-                                ServiceUtils.stopService(GREAccessibilityService1.class);
+                            public void exit() {
+                                exitWindowManager();
                             }
-                        });
-                        tpToggleNotify.setOnClickListener(new View.OnClickListener() {
+
                             @Override
-                            public void onClick(View v) {
-                                tpToggleNotify.detail().toggel();
-                                boolean toggleOn = tpToggleNotify.detail().isToggleOn();
+                            public void focusOnCurGroup(boolean toggleOn) {
+                                Config.isNotificationIgnored = toggleOn;
+                            }
+
+                            @Override
+                            public void keepLight(boolean toggleOn) {
+                                keepScreen(toggleOn);
+                            }
+
+                            @Override
+                            public void toggleNotifyService(boolean toggleOn) {
                                 if (toggleOn) {
-                                    String string = Settings.Secure.getString(v.getContext().getContentResolver(),
+                                    String string = Settings.Secure.getString(ContextUtils.getContentResolver(),
                                             "enabled_notification_listeners");
-                                    if (!string.contains(NotificationService.class.getName())) {
-                                        v.getContext().startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                                    if (!string.contains(NotificationService.class.getName()) || !ServiceUtils.isRunning(NotificationService.class)) {
+                                        ContextUtils.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
                                     }
                                 } else {
                                     ServiceUtils.stopService(NotificationService.class);
+                                }
+                            }
+
+                            @Override
+                            public void checkOpenLuckyMoney(View view, boolean toggleOn) {
+                                if (toggleOn) {
+                                    showLocationView(view.getContext(), ConfigHelper.getOpenLuckyMoneyLocation(), ConfigHelper.KEY_OPEN_LUCKY_MONEY_LOCATION);
+                                } else {
+                                    ConfigHelper.saveLocation(ConfigHelper.KEY_OPEN_LUCKY_MONEY_LOCATION, null);
+                                }
+                            }
+
+                            @Override
+                            public void checkCloseLuckyMoney(View view, boolean toggleOn) {
+                                if (toggleOn) {
+                                    Point point = ConfigHelper.getCloseLuckyMoneyOpenLocation();
+                                    if (point == null)
+                                        point = new Point(ScreenUtils.getScreenWidth() / 2, ScreenUtils.getScreenHeight() / 2);
+                                    showLocationView(view.getContext(), point, ConfigHelper.KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION);
+                                } else {
+                                    ConfigHelper.saveLocation(ConfigHelper.KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION, null);
+                                }
+                            }
+
+                            @Override
+                            public void checkExitLuckyMoneyDetail(View view, boolean toggleOn) {
+                                if (toggleOn) {
+                                    showLocationView(view.getContext(), ConfigHelper.getExitLuckyMoneyDetailLocation(), ConfigHelper.KEY_EXIT_LUCKY_MONEY_DETAIL_LOCATION);
+                                } else {
+                                    ConfigHelper.saveLocation(ConfigHelper.KEY_EXIT_LUCKY_MONEY_DETAIL_LOCATION, null);
                                 }
                             }
                         });
@@ -112,6 +144,14 @@ public class GREWindowManagerHelper {
                 public void onClick(View v) {
                     int[] locations = ViewUtils.getLocationsOnScreen(mLocationView);
                     ConfigHelper.saveLocation(key, new Point(locations[0], locations[1]));
+                    removeLocationView();
+                }
+            });
+            mLocationView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    removeLocationView();
+                    return true;
                 }
             });
         } else {
@@ -125,6 +165,27 @@ public class GREWindowManagerHelper {
     public void removeLocationView() {
         if (mLocationView != null) {
             mWindowManagerHelper.removeView(mLocationView);
+            mLocationView = null;
+        }
+    }
+
+    public void exitWindowManager() {
+        mWindowManagerHelper.removeAllViews();
+        ServiceUtils.stopService(GREAccessibilityService5.class);
+        ServiceUtils.stopService(NotificationService.class);
+        keepScreen(false);
+        Config.isExit = true;
+    }
+
+    private void keepScreen(boolean on) {
+        if (on) {
+            mPowerHelper = new PowerHelper();
+            mPowerHelper.keepScreenOn();
+        } else {
+            if (mPowerHelper != null) {
+                mPowerHelper.turnScreenOff();
+                mPowerHelper = null;
+            }
         }
     }
 }

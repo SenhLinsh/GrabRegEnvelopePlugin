@@ -6,7 +6,9 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService1;
+import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
+import com.linsh.grabregenvelopeplugin.common.Constants;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
 import com.linsh.utilseverywhere.HandlerUtils;
 import com.linsh.utilseverywhere.ToastUtils;
 
@@ -20,7 +22,7 @@ import com.linsh.utilseverywhere.ToastUtils;
  */
 public class ClickPerformer implements Runnable {
 
-    private GREAccessibilityService1 mService;
+    private GREAccessibilityService5 mService;
     private Point mPoint;
     private String mActivityName;
     private int mTimes;
@@ -28,7 +30,7 @@ public class ClickPerformer implements Runnable {
     private String key;
     private int interval;
 
-    public ClickPerformer(GREAccessibilityService1 service, Point point, String activityName) {
+    public ClickPerformer(GREAccessibilityService5 service, Point point, String activityName) {
         mService = service;
         mPoint = point;
         mActivityName = activityName;
@@ -37,24 +39,32 @@ public class ClickPerformer implements Runnable {
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void run() {
-        if (mActivityName.equals(GREAccessibilityService1.sCurActivityName)) {
-            Path path = new Path();
-            path.moveTo(mPoint.x, mPoint.y);
-            GestureDescription gesture = new GestureDescription.Builder()
-                    .addStroke(new GestureDescription.StrokeDescription(path, 0, 50))
-                    .build();
-            mService.dispatchGesture(gesture, null, null);
-
-            switch (mTimes) {
-                case 5:
+        if (mActivityName.equals(GREAccessibilityService5.sCurActivityName)) {
+            // 模拟点击
+            performClick(mPoint);
+            switch (mTimes++) {
+                case 4:
                     ToastUtils.showLong("╮（╯＿╰）╭ 我尝试了几次 好像点了没反应?");
                     break;
-                case 10:
+                case 5:
+                    if (mActivityName.equals(Constants.UI_LUCKY_MONEY_OPEN)) {
+                        Point point = ConfigHelper.getCloseLuckyMoneyOpenLocation();
+                        if (point != null) {
+                            performClick(point);
+                        }
+                    }
+                    break;
+                case 8:
                     ToastUtils.showLong("(⊙﹏⊙) 难道我的人工智能算法出错了?");
                     break;
+                case 12:
+                    ToastUtils.showLong(errorMsg);
+                    break;
                 case 15:
-                    ToastUtils.showLong(errorMsg + " 帮我校准一下位置吧");
-                    mService.showLocationView(mPoint, key);
+                    ToastUtils.showLong("请尝试按 Home 键再回来, 以方便我们确定位置");
+                    break;
+                case 18:
+                    ToastUtils.showLong("请尝试按 Home 键再回来, 以方便我们确定位置");
                     return;
                 default:
                     break;
@@ -63,6 +73,16 @@ public class ClickPerformer implements Runnable {
                 HandlerUtils.postRunnable(this, interval);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private void performClick(Point point) {
+        Path path = new Path();
+        path.moveTo(point.x, point.y);
+        GestureDescription gesture = new GestureDescription.Builder()
+                .addStroke(new GestureDescription.StrokeDescription(path, 0, 50))
+                .build();
+        mService.dispatchGesture(gesture, null, null);
     }
 
     public ClickPerformer setErrorMsg(String errorMsg) {

@@ -22,7 +22,7 @@
         </activity>
 
         <service
-            android:name=".service.GREAccessibilityService1"
+            android:name=".service.GREAccessibilityService5"
             android:enabled="true"
             android:exported="true"
             android:label="@string/label"
