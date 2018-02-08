@@ -7,7 +7,7 @@ import android.graphics.Point;
 import android.os.Build;
 
 import com.linsh.grabregenvelopeplugin.common.Constants;
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService;
 import com.linsh.utilseverywhere.HandlerUtils;
 import com.linsh.utilseverywhere.ToastUtils;
 
@@ -21,7 +21,7 @@ import com.linsh.utilseverywhere.ToastUtils;
  */
 public class ClickPerformer implements Runnable {
 
-    private GREAccessibilityService5 mService;
+    private GREAccessibilityService mService;
     private Point mPoint;
     private String mActivityName;
     private int mTimes;
@@ -29,7 +29,7 @@ public class ClickPerformer implements Runnable {
     private String key;
     private int interval;
 
-    public ClickPerformer(GREAccessibilityService5 service, Point point, String activityName) {
+    public ClickPerformer(GREAccessibilityService service, Point point, String activityName) {
         mService = service;
         mPoint = point;
         mActivityName = activityName;
@@ -38,7 +38,7 @@ public class ClickPerformer implements Runnable {
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void run() {
-        if (mActivityName.equals(GREAccessibilityService5.sCurActivityName)) {
+        if (mActivityName.equals(GREAccessibilityService.sCurActivityName)) {
             // 模拟点击
             performClick(mPoint);
             switch (mTimes++) {

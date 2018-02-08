@@ -2,6 +2,8 @@ package com.linsh.grabregenvelopeplugin.common;
 
 import android.graphics.Point;
 
+import com.linsh.grabregenvelopeplugin.model.OpenLuckyMoneyTimes;
+import com.linsh.lshutils.utils.PropertiesFileUtils;
 import com.linsh.utilseverywhere.ScreenUtils;
 import com.linsh.utilseverywhere.SharedPreferenceUtils;
 
@@ -16,6 +18,9 @@ import com.linsh.utilseverywhere.SharedPreferenceUtils;
 public class ConfigHelper {
 
     public static final String KEY_OPEN_LUCKY_MONEY_LOCATION = "open_lucky_money_location";
+    public static final String KEY_FIRST_IN = "first_in";
+    public static final String KEY_EXIT_LUCKY_MONEY_DETAIL_TIME = "exit_lucky_money_detail_time";
+    public static final String KEY_OPEN_LUCKY_MONEY_TIME = "open_lucky_money_time";
     private static Point sOpenLuckyMoneyLocation;
     private static boolean requireOpenLuckyMoneyLocation;
 
@@ -47,4 +52,59 @@ public class ConfigHelper {
     }
 
 
+    public static boolean isFirstIn() {
+        return SharedPreferenceUtils.getBoolean(KEY_FIRST_IN, true);
+    }
+
+    public static void setFirstIn(boolean firstIn) {
+        SharedPreferenceUtils.putBoolean(KEY_FIRST_IN, firstIn);
+    }
+
+    public static void saveExitLuckyMoneyDetailUiTime(int delay) {
+        SharedPreferenceUtils.putInt(KEY_EXIT_LUCKY_MONEY_DETAIL_TIME, delay);
+    }
+
+    public static int getExitLuckyMoneyDetailUiTime(int def) {
+        return SharedPreferenceUtils.getInt(KEY_EXIT_LUCKY_MONEY_DETAIL_TIME, def);
+    }
+
+    public static void saveOpenLuckyMoneyTime(int delay) {
+        SharedPreferenceUtils.putInt(KEY_OPEN_LUCKY_MONEY_TIME, delay);
+    }
+
+    public static int getOpenLuckyMoneyTime(int def) {
+        return SharedPreferenceUtils.getInt(KEY_OPEN_LUCKY_MONEY_TIME, def);
+    }
+
+    public static int getMinOpenLuckyMoneyTime() {
+        if (Config.sOpenLuckyMoneyCounts < 3) {
+            return 0;
+        } else if (Config.sOpenLuckyMoneyCounts < 10) {
+            return 500;
+        } else {
+            return 2000;
+        }
+    }
+
+    public static int getOpenLuckyMoneyTime() {
+        if (Config.sOpenLuckyMoneyCounts < 3) {
+            return Config.sTimeDelayPerformClickOpen;
+        } else if (Config.sOpenLuckyMoneyCounts < 10) {
+            if (Config.sTimeDelayPerformClickOpen < 500)
+                Config.sTimeDelayPerformClickOpen = 500;
+            return Config.sTimeDelayPerformClickOpen;
+        } else {
+            if (Config.sTimeDelayPerformClickOpen < 2000)
+                Config.sTimeDelayPerformClickOpen = 2000;
+            return Config.sTimeDelayPerformClickOpen;
+        }
+    }
+
+    public static void addOpenLuckyMoneyCount() {
+        Config.sOpenLuckyMoneyCounts++;
+        OpenLuckyMoneyTimes count = new OpenLuckyMoneyTimes();
+        count.times = Config.sOpenLuckyMoneyCounts;
+        count.timestamp = System.currentTimeMillis();
+        PropertiesFileUtils.putObject(count);
+    }
 }

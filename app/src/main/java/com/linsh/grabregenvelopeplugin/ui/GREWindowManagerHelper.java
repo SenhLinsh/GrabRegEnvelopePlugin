@@ -11,7 +11,7 @@ import android.view.WindowManager;
 import com.linsh.grabregenvelopeplugin.R;
 import com.linsh.grabregenvelopeplugin.common.Config;
 import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService;
 import com.linsh.grabregenvelopeplugin.service.NotificationService;
 import com.linsh.grabregenvelopeplugin.viewHelper.FloatingViewHelper;
 import com.linsh.grabregenvelopeplugin.viewHelper.SettingViewHelper;
@@ -154,7 +154,7 @@ public class GREWindowManagerHelper {
 
     public void exitWindowManager() {
         mWindowManagerHelper.removeAllViews();
-        ServiceUtils.stopService(GREAccessibilityService5.class);
+        ServiceUtils.stopService(GREAccessibilityService.class);
         ServiceUtils.stopService(NotificationService.class);
         keepScreen(false);
         Config.isExit = true;

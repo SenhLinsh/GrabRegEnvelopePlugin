@@ -9,6 +9,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.linsh.grabregenvelopeplugin.BuildConfig;
 import com.linsh.grabregenvelopeplugin.common.Config;
+import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
 import com.linsh.grabregenvelopeplugin.common.Constants;
 import com.linsh.grabregenvelopeplugin.model.ClickPerformer;
 import com.linsh.grabregenvelopeplugin.page.UIChat;
@@ -21,10 +22,11 @@ import com.linsh.utilseverywhere.LogUtils;
 import com.linsh.utilseverywhere.ToastUtils;
 import com.linsh.utilseverywhere.tools.AccessibilityHelper;
 
-public class GREAccessibilityService5 extends AccessibilityService {
+public class GREAccessibilityService extends AccessibilityService {
 
     public static String sCurActivityName;
     public static int sCurPageType;
+    public static boolean isOpening;
 
     private AccessibilityHelper mHelper;
     private GREWindowManagerHelper mWindowManagerHelper;
@@ -44,12 +46,10 @@ public class GREAccessibilityService5 extends AccessibilityService {
         mHelper = new AccessibilityHelper(this);
         mWindowManagerHelper = new GREWindowManagerHelper();
         mWindowManagerHelper.showFloatingView(this);
-        if (BuildConfig.DEBUG) {
-            AccessibilityServiceInfo info = getServiceInfo();
-            if (info == null) info = new AccessibilityServiceInfo();
-            info.flags |= AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
-            setServiceInfo(info);
-        }
+        AccessibilityServiceInfo info = getServiceInfo();
+        if (info == null) info = new AccessibilityServiceInfo();
+        info.flags |= AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+        setServiceInfo(info);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class GREAccessibilityService5 extends AccessibilityService {
                 if (className.equals(Constants.UI_MAIN)) { // 主界面 & 聊天界面
                     sCurActivityName = className;
                     sCurPageType = 0;
+                    isOpening = false;
                     // 由于从微信主界面到微信聊天界面的切换不会发生窗口状态变化,
                     // 所以把这个逻辑放在窗口内容变化那里去
                 } else if (className.equals(Constants.UI_LUCKY_MONEY_OPEN)) { // 红包打开界面
@@ -100,9 +101,14 @@ public class GREAccessibilityService5 extends AccessibilityService {
                     sCurPageType = Constants.TYPE_LUCKY_MONEY_DETAIL;
                     // 提示并退出红包
                     UILuckyMoneyDetail.exitLuckyMoneyDetail(this, mHelper);
+                    if (isOpening) {
+                        ConfigHelper.addOpenLuckyMoneyCount();
+                    }
+                    isOpening = false;
                 } else {
                     sCurActivityName = null;
                     sCurPageType = 0;
+                    isOpening = false;
                 }
                 break;
             // View 滚动
@@ -117,7 +123,8 @@ public class GREAccessibilityService5 extends AccessibilityService {
             // 窗口内容改变
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 if (Constants.UI_MAIN.equals(sCurActivityName)) {
-                    if (mHelper.findNodeInfosByViewId(Constants.ID_CHAT_BACK).size() > 0) { // 聊天界面
+                    if (mHelper.findNodeInfosByViewId(Config.sIdChatBack).size() > 0) { // 聊天界面
+                        Config.sNeedCheckIdChatBack = false;
                         if (sCurPageType != Constants.TYPE_CHAT) {
                             // 寻找没有打开过的红包, 并查看红包
                             UIChat.findPackets(this, mHelper);
@@ -125,6 +132,7 @@ public class GREAccessibilityService5 extends AccessibilityService {
                             Log.i("GREAccessibilityService", "sCurPageType: " + sCurPageType);
                         }
                     } else { // 主界面
+                        UIChat.checkBackId(mHelper);
                         if (sCurPageType != Constants.TYPE_MAIN) {
                             sCurPageType = Constants.TYPE_MAIN;
                             Log.i("GREAccessibilityService", "sCurPageType: " + sCurPageType);

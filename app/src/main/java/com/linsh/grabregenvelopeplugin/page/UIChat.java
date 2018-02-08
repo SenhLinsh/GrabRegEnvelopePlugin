@@ -2,7 +2,8 @@ package com.linsh.grabregenvelopeplugin.page;
 
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
+import com.linsh.grabregenvelopeplugin.common.Config;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService;
 import com.linsh.utilseverywhere.ToastUtils;
 import com.linsh.utilseverywhere.tools.AccessibilityHelper;
 
@@ -19,12 +20,13 @@ import java.util.List;
  */
 public class UIChat {
 
-    public static void findPackets(GREAccessibilityService5 service, AccessibilityHelper helper) {
+    public static void findPackets(GREAccessibilityService service, AccessibilityHelper helper) {
         AccessibilityNodeInfo rootNode = service.getRootInActiveWindow();
         if (rootNode != null) {
             final List<AccessibilityNodeInfo> parents = new ArrayList<>();
             recycle(parents, rootNode);
             if (parents.size() > 0) {
+                GREAccessibilityService.isOpening = true;
                 ToastUtils.show("找到一个红包 φ(゜▽゜*)♪ 正在召唤出来");
                 parents.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
             }
@@ -59,5 +61,15 @@ public class UIChat {
             }
         }
         return parents;
+    }
+
+    public static void checkBackId(AccessibilityHelper helper) {
+        if (Config.sNeedCheckIdChatBack) {
+            List<AccessibilityNodeInfo> list = helper.findNodeInfosByContentDescriptions("返回");
+            if (list.size() == 1) {
+                Config.sNeedCheckIdChatBack = false;
+                Config.sIdChatBack = list.get(0).getViewIdResourceName();
+            }
+        }
     }
 }

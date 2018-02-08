@@ -3,7 +3,7 @@ package com.linsh.grabregenvelopeplugin.model;
 import android.annotation.TargetApi;
 import android.os.Build;
 
-import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
+import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService;
 
 /**
  * <pre>
@@ -15,11 +15,11 @@ import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
  */
 public class ActionPerformer implements Runnable {
 
-    private GREAccessibilityService5 mService;
+    private GREAccessibilityService mService;
     private int mAction;
     private String mActivityName;
 
-    public ActionPerformer(GREAccessibilityService5 service, int action, String activityName) {
+    public ActionPerformer(GREAccessibilityService service, int action, String activityName) {
         mService = service;
         mAction = action;
         mActivityName = activityName;
@@ -28,7 +28,7 @@ public class ActionPerformer implements Runnable {
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void run() {
-        if (mActivityName.equals(GREAccessibilityService5.sCurActivityName)) {
+        if (mActivityName.equals(GREAccessibilityService.sCurActivityName)) {
             mService.performGlobalAction(mAction);
         }
     }
