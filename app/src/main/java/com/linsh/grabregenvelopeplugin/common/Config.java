@@ -21,7 +21,7 @@ public class Config {
     public static String sAimGroupChat;
 
     public static boolean isNotificationIgnored;
-    public static boolean isExit;
+    public static boolean isExit = true;
     public static int sOpenLuckyMoneyCounts;
 
     public static int sTimeExitLuckyMoneyDetailUi = 3000;

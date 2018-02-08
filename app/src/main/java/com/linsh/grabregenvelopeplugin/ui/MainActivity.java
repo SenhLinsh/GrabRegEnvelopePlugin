@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         int exitLuckyMoneyDetailTime = Config.sTimeExitLuckyMoneyDetailUi;
         tvDelayExitLuckyMoneyDetail.setText("退出红包详情-延迟时间: " + exitLuckyMoneyDetailTime + "ms");
         sbDelayExitLuckyMoneyDetail.setProgress(exitLuckyMoneyDetailTime / 100);
+
+        findViewById(R.id.tv_hint_show).setVisibility(Config.isExit ? View.VISIBLE : View.GONE);
     }
 
     public void onclick(View view) {

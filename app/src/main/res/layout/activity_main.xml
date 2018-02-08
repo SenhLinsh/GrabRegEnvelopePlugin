@@ -36,6 +36,23 @@
         app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
+        android:id="@+id/tv_hint_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:onClick="getPermission"
+        android:text="只有悬浮窗弹出来了我才能干活哦 Σ( ° △ °|||)︴"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_detail"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn"
+        tools:visibility="visible"/>
+
+    <TextView
         android:id="@+id/tv_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

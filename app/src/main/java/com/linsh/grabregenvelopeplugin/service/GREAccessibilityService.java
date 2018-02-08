@@ -167,6 +167,13 @@ public class GREAccessibilityService extends AccessibilityService {
     public void onInterrupt() {
         ToastUtils.showLong("(＞﹏＜) 我中枪倒地了...");
         mHelper = null;
+        Config.isExit = true;
         mWindowManagerHelper = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Config.isExit = true;
     }
 }
