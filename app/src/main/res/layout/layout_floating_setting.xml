@@ -79,23 +79,6 @@
                 app:titleTextSize="@dimen/text_normal"
                 app:toggleOn="false"/>
 
-            <com.linsh.views.preference.TogglePreference
-                android:id="@+id/tp_check_close_lucky_monkey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:titleText="红包界面 - 关闭"
-                app:titleTextColor="@color/text_normal"
-                app:titleTextSize="@dimen/text_normal"
-                app:toggleOn="false"/>
-
-            <com.linsh.views.preference.TogglePreference
-                android:id="@+id/tp_check_exit_lucky_monkey_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:titleText="红包详情界面 - 返回"
-                app:titleTextColor="@color/text_normal"
-                app:titleTextSize="@dimen/text_normal"
-                app:toggleOn="false"/>
         </LinearLayout>
 
 

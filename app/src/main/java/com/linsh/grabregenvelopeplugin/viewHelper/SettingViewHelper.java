@@ -27,8 +27,6 @@ public class SettingViewHelper implements View.OnClickListener {
     private final TogglePreference mTpKeepLight;
     private final TogglePreference mTpToggleNotify;
     private final TogglePreference mTpCheckOpenLuckyMoney;
-    private final TogglePreference mTpCheckCloseLuckyMoney;
-    private final TogglePreference mTpCheckExitLuckyMoneyDetail;
 
     public SettingViewHelper(Context context) {
         mViewHelper = new WindowManagerViewHelper(context, R.layout.layout_floating_setting)
@@ -41,8 +39,6 @@ public class SettingViewHelper implements View.OnClickListener {
         mTpKeepLight = settingView.findViewById(R.id.tp_setting_keep_light);
         mTpToggleNotify = settingView.findViewById(R.id.tp_toggle_notification_service);
         mTpCheckOpenLuckyMoney = settingView.findViewById(R.id.tp_check_open_lucky_money);
-        mTpCheckCloseLuckyMoney = settingView.findViewById(R.id.tp_check_close_lucky_monkey);
-        mTpCheckExitLuckyMoneyDetail = settingView.findViewById(R.id.tp_check_exit_lucky_monkey_detail);
 
         BackgroundUtils.addPressedEffect(tvDismiss);
         BackgroundUtils.addPressedEffect(tvExit);
@@ -55,8 +51,6 @@ public class SettingViewHelper implements View.OnClickListener {
         mTpKeepLight.setOnClickListener(this);
         mTpToggleNotify.setOnClickListener(this);
         mTpCheckOpenLuckyMoney.setOnClickListener(this);
-        mTpCheckCloseLuckyMoney.setOnClickListener(this);
-        mTpCheckExitLuckyMoneyDetail.setOnClickListener(this);
     }
 
     @Override
@@ -85,16 +79,6 @@ public class SettingViewHelper implements View.OnClickListener {
                 mTpCheckOpenLuckyMoney.detail().toggle();
                 mViewHelperListener.checkOpenLuckyMoney(mTpCheckOpenLuckyMoney, mTpCheckOpenLuckyMoney.detail().isToggleOn());
                 break;
-            case R.id.tp_check_close_lucky_monkey:
-                mTpCheckCloseLuckyMoney.detail().toggle();
-                mViewHelperListener.checkCloseLuckyMoney(mTpCheckCloseLuckyMoney, mTpCheckCloseLuckyMoney.detail().isToggleOn());
-                break;
-            case R.id.tp_check_exit_lucky_monkey_detail:
-                mTpCheckExitLuckyMoneyDetail.detail().toggle();
-                mViewHelperListener.checkExitLuckyMoneyDetail(mTpCheckExitLuckyMoneyDetail, mTpCheckExitLuckyMoneyDetail.detail().isToggleOn());
-                break;
-            default:
-                break;
         }
     }
 
@@ -116,14 +100,6 @@ public class SettingViewHelper implements View.OnClickListener {
         mTpCheckOpenLuckyMoney.detail().setToggle(on);
     }
 
-    public void toggleCheckCloseLuckyMoney(boolean on) {
-        mTpCheckOpenLuckyMoney.detail().setToggle(on);
-    }
-
-    public void toggleCheckExitLuckyMoneyDetail(boolean on) {
-        mTpCheckOpenLuckyMoney.detail().setToggle(on);
-    }
-
     public void toggleIgnoreNotification(boolean ignore) {
         mTpFocusOnCurGroup.detail().setToggle(ignore);
     }
@@ -141,10 +117,6 @@ public class SettingViewHelper implements View.OnClickListener {
         void toggleNotifyService(boolean toggleOn);
 
         void checkOpenLuckyMoney(View view, boolean toggleOn);
-
-        void checkCloseLuckyMoney(View view, boolean toggleOn);
-
-        void checkExitLuckyMoneyDetail(View view, boolean toggleOn);
     }
 
 }

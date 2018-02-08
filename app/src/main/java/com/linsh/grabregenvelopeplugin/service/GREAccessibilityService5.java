@@ -59,6 +59,11 @@ public class GREAccessibilityService5 extends AccessibilityService {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    protected boolean onGesture(int gestureId) {
+        return super.onGesture(gestureId);
+    }
+
     /**
      * 监听窗口变化的回调
      */
@@ -134,6 +139,14 @@ public class GREAccessibilityService5 extends AccessibilityService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             HandlerUtils.postRunnable(performer, delay);
         }
+    }
+
+    public void performAction(int action) {
+        performGlobalAction(action);
+    }
+
+    public void performActionBack() {
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
     }
 
     /**

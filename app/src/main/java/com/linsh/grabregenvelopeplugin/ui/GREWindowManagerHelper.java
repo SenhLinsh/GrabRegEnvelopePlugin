@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -19,7 +20,6 @@ import com.linsh.lshutils.helper.wm.WindowManagerHelper;
 import com.linsh.lshutils.helper.wm.WindowManagerViewHelper;
 import com.linsh.lshutils.tools.PowerHelper;
 import com.linsh.utilseverywhere.ContextUtils;
-import com.linsh.utilseverywhere.ScreenUtils;
 import com.linsh.utilseverywhere.ServiceUtils;
 import com.linsh.utilseverywhere.ViewUtils;
 
@@ -52,18 +52,16 @@ public class GREWindowManagerHelper {
             floatingViewHelper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mWindowManagerHelper.getViewCount() == 1) {
+                    if (!mWindowManagerHelper.containViewType(ConstraintLayout.class)) {
                         SettingViewHelper settingViewHelper = new SettingViewHelper(v.getContext());
                         settingViewHelper.addView(mWindowManagerHelper);
                         settingViewHelper.toggleIgnoreNotification(Config.isNotificationIgnored);
                         settingViewHelper.toggleKeepLight(mPowerHelper != null);
-                        settingViewHelper.toggleCheckOpenLuckyMoney(ConfigHelper.isRequireOpenLuckyMoneyLocation());
-                        settingViewHelper.toggleCheckCloseLuckyMoney(ConfigHelper.isRequireCloseLuckyMoneyOpenLocation());
-                        settingViewHelper.toggleCheckExitLuckyMoneyDetail(ConfigHelper.isRequireExitLuckyMoneyDetailLocation());
+                        settingViewHelper.toggleCheckOpenLuckyMoney(!ConfigHelper.isRequireOpenLuckyMoneyLocation());
                         settingViewHelper.setViewHelperListener(new SettingViewHelper.ViewHelperListener() {
                             @Override
                             public void dismiss() {
-                                mWindowManagerHelper.removeView(1);
+                                removeSettingView();
                             }
 
                             @Override
@@ -97,30 +95,11 @@ public class GREWindowManagerHelper {
                             @Override
                             public void checkOpenLuckyMoney(View view, boolean toggleOn) {
                                 if (toggleOn) {
+                                    removeSettingView();
                                     showLocationView(view.getContext(), ConfigHelper.getOpenLuckyMoneyLocation(), ConfigHelper.KEY_OPEN_LUCKY_MONEY_LOCATION);
                                 } else {
                                     ConfigHelper.saveLocation(ConfigHelper.KEY_OPEN_LUCKY_MONEY_LOCATION, null);
-                                }
-                            }
-
-                            @Override
-                            public void checkCloseLuckyMoney(View view, boolean toggleOn) {
-                                if (toggleOn) {
-                                    Point point = ConfigHelper.getCloseLuckyMoneyOpenLocation();
-                                    if (point == null)
-                                        point = new Point(ScreenUtils.getScreenWidth() / 2, ScreenUtils.getScreenHeight() / 2);
-                                    showLocationView(view.getContext(), point, ConfigHelper.KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION);
-                                } else {
-                                    ConfigHelper.saveLocation(ConfigHelper.KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION, null);
-                                }
-                            }
-
-                            @Override
-                            public void checkExitLuckyMoneyDetail(View view, boolean toggleOn) {
-                                if (toggleOn) {
-                                    showLocationView(view.getContext(), ConfigHelper.getExitLuckyMoneyDetailLocation(), ConfigHelper.KEY_EXIT_LUCKY_MONEY_DETAIL_LOCATION);
-                                } else {
-                                    ConfigHelper.saveLocation(ConfigHelper.KEY_EXIT_LUCKY_MONEY_DETAIL_LOCATION, null);
+                                    removeLocationView();
                                 }
                             }
                         });
@@ -128,6 +107,10 @@ public class GREWindowManagerHelper {
                 }
             });
         }
+    }
+
+    private void removeSettingView() {
+        mWindowManagerHelper.removeView(1);
     }
 
     public void showLocationView(Context context, Point location, final String key) {

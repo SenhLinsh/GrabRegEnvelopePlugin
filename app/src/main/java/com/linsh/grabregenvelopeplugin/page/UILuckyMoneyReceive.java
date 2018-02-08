@@ -26,7 +26,6 @@ public class UILuckyMoneyReceive {
 
     public static void openLuckyMoney(GREAccessibilityService5 service, AccessibilityHelper helper) {
         checkOpenLuckyMonkeyBtn(helper); // 检查『打开』红包按钮位置
-        checkCloseLuckyMoneyOpenBtn(helper); // 检查『看看大家的手气』按钮位置
         List<String> allTexts = helper.findAllTexts();
         LogUtils.i("allTexts size=" + allTexts.size(), allTexts);
         ToastUtils.showLong("我要打开红包了哦 ✧(≖ ◡ ≖✿) 兴不兴奋!");
@@ -45,18 +44,6 @@ public class UILuckyMoneyReceive {
                 Rect rect = new Rect();
                 info.getBoundsInScreen(rect);
                 ConfigHelper.saveLocation(ConfigHelper.KEY_OPEN_LUCKY_MONEY_LOCATION,
-                        new Point((rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2));
-            }
-        }
-    }
-
-    private static void checkCloseLuckyMoneyOpenBtn(AccessibilityHelper helper) {
-        if (ConfigHelper.isRequireCloseLuckyMoneyOpenLocation()) {
-            AccessibilityNodeInfo info = helper.findFirstNodeInfoByViewId(Constants.ID_OPEN_LUCKY_MONEY_CLOSE);
-            if (info != null) {
-                Rect rect = new Rect();
-                info.getBoundsInScreen(rect);
-                ConfigHelper.saveLocation(ConfigHelper.KEY_CLOSE_LUCKY_MONEY_OPEN_LOCATION,
                         new Point((rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2));
             }
         }

@@ -12,6 +12,7 @@ import android.view.View;
 import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
 import com.linsh.lshutils.utils.Permission;
 import com.linsh.utilseverywhere.ADBUtils;
+import com.linsh.utilseverywhere.ContextUtils;
 import com.linsh.utilseverywhere.IntentUtils;
 import com.linsh.utilseverywhere.PermissionUtils;
 import com.linsh.utilseverywhere.ServiceUtils;
@@ -56,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void runServiceIfNotRunning() {
         boolean running = ServiceUtils.isRunning(GREAccessibilityService5.class);
         if (!running) {
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivity(intent);
+            ContextUtils.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             ToastUtils.showLong("((*・∀・）ゞ→→ 需要打开自动模式");
         } else {
             ServiceUtils.startService(GREAccessibilityService5.class);

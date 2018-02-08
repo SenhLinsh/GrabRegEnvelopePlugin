@@ -6,7 +6,6 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 
-import com.linsh.grabregenvelopeplugin.common.ConfigHelper;
 import com.linsh.grabregenvelopeplugin.common.Constants;
 import com.linsh.grabregenvelopeplugin.service.GREAccessibilityService5;
 import com.linsh.utilseverywhere.HandlerUtils;
@@ -46,25 +45,14 @@ public class ClickPerformer implements Runnable {
                 case 4:
                     ToastUtils.showLong("╮（╯＿╰）╭ 我尝试了几次 好像点了没反应?");
                     break;
-                case 5:
-                    if (mActivityName.equals(Constants.UI_LUCKY_MONEY_OPEN)) {
-                        Point point = ConfigHelper.getCloseLuckyMoneyOpenLocation();
-                        if (point != null) {
-                            performClick(point);
-                        }
+                case 6:
+                    if (mActivityName.equals(Constants.UI_LUCKY_MONEY_OPEN)
+                            || mActivityName.equals(Constants.UI_LUCKY_MONEY_DETAIL)) {
+                        mService.performActionBack();
                     }
                     break;
-                case 8:
-                    ToastUtils.showLong("(⊙﹏⊙) 难道我的人工智能算法出错了?");
-                    break;
-                case 12:
+                case 10:
                     ToastUtils.showLong(errorMsg);
-                    break;
-                case 15:
-                    ToastUtils.showLong("请尝试按 Home 键再回来, 以方便我们确定位置");
-                    break;
-                case 18:
-                    ToastUtils.showLong("请尝试按 Home 键再回来, 以方便我们确定位置");
                     return;
                 default:
                     break;
