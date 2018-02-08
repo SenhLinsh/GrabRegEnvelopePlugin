@@ -27,6 +27,7 @@ public class GREAccessibilityService extends AccessibilityService {
     public static String sCurActivityName;
     public static int sCurPageType;
     public static boolean isOpening;
+    public static boolean isFindingPacket;
 
     private AccessibilityHelper mHelper;
     private GREWindowManagerHelper mWindowManagerHelper;
@@ -46,10 +47,12 @@ public class GREAccessibilityService extends AccessibilityService {
         mHelper = new AccessibilityHelper(this);
         mWindowManagerHelper = new GREWindowManagerHelper();
         mWindowManagerHelper.showFloatingView(this);
-        AccessibilityServiceInfo info = getServiceInfo();
-        if (info == null) info = new AccessibilityServiceInfo();
-        info.flags |= AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
-        setServiceInfo(info);
+        if (Config.sIsIdChatBackNeeded) {
+            AccessibilityServiceInfo info = getServiceInfo();
+            if (info == null) info = new AccessibilityServiceInfo();
+            info.flags |= AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+            setServiceInfo(info);
+        }
     }
 
     @Override
@@ -114,7 +117,7 @@ public class GREAccessibilityService extends AccessibilityService {
             // View 滚动
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
                 if (Constants.UI_MAIN.equals(sCurActivityName)) {
-                    if (sCurPageType == Constants.TYPE_CHAT) {
+                    if (sCurPageType == Constants.TYPE_CHAT && !isOpening) {
                         // 寻找没有打开过的红包, 并查看红包
                         UIChat.findPackets(this, mHelper);
                     }
@@ -122,9 +125,9 @@ public class GREAccessibilityService extends AccessibilityService {
                 break;
             // 窗口内容改变
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                if (Constants.UI_MAIN.equals(sCurActivityName)) {
+                if (Constants.UI_MAIN.equals(sCurActivityName) && !isOpening) {
                     if (mHelper.findNodeInfosByViewId(Config.sIdChatBack).size() > 0) { // 聊天界面
-                        Config.sNeedCheckIdChatBack = false;
+                        Config.sIsIdChatBackNeeded = false;
                         if (sCurPageType != Constants.TYPE_CHAT) {
                             // 寻找没有打开过的红包, 并查看红包
                             UIChat.findPackets(this, mHelper);

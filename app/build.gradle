@@ -16,6 +16,30 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField "boolean", "IS_USER", "true"
+        }
+    }
+    // 控制打包apk的文件名
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if ("user" == variant.flavorName) {
+                outputFileName = "红包助手(user)_v${variant.versionName}.apk"
+            } else {
+                outputFileName = "红包助手_v${variant.versionName}.apk"
+            }
+        }
+    }
+    flavorDimensions "default"
+    productFlavors {
+        user {
+            dimension "default"
+            buildConfigField "boolean", "IS_USER", "true"
+        }
+        guest {
+            dimension "default"
+            buildConfigField "boolean", "IS_USER", "false"
+        }
     }
 }
 

@@ -76,7 +76,6 @@ public class SplashActivity extends AppCompatActivity {
                 public void onClick(View widget) {
                     ConfigHelper.setFirstIn(false);
                     startMainActivity();
-                    finish();
                 }
             }, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), new RelativeSizeSpan(1.5f));
             tvContent.setText(builder.getText());
@@ -88,5 +87,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private void startMainActivity() {
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        finish();
     }
 }

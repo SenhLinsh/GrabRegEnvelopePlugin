@@ -30,7 +30,7 @@ public class Config {
     public static int sTimeIntervalPerformClick = 1000;
 
     public static String sIdChatBack = "com.tencent.mm:id/h_";
-    public static boolean sNeedCheckIdChatBack = true;
+    public static boolean sIsIdChatBackNeeded = true;
 
     static {
         sTimeExitLuckyMoneyDetailUi = ConfigHelper.getExitLuckyMoneyDetailUiTime(3000);
@@ -50,5 +50,10 @@ public class Config {
             }
         }
         sTimeDelayPerformClickOpen = ConfigHelper.getOpenLuckyMoneyTime(1000);
+        String idChatBack = ConfigHelper.getIdChatBack();
+        if (idChatBack != null) {
+            sIdChatBack = idChatBack;
+            sIsIdChatBackNeeded = false;
+        }
     }
 }

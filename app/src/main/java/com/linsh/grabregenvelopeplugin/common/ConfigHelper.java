@@ -2,6 +2,7 @@ package com.linsh.grabregenvelopeplugin.common;
 
 import android.graphics.Point;
 
+import com.linsh.grabregenvelopeplugin.BuildConfig;
 import com.linsh.grabregenvelopeplugin.model.OpenLuckyMoneyTimes;
 import com.linsh.lshutils.utils.PropertiesFileUtils;
 import com.linsh.utilseverywhere.ScreenUtils;
@@ -77,7 +78,7 @@ public class ConfigHelper {
     }
 
     public static int getMinOpenLuckyMoneyTime() {
-        if (Config.sOpenLuckyMoneyCounts < 3) {
+        if (Config.sOpenLuckyMoneyCounts < 3 || BuildConfig.IS_USER) {
             return 0;
         } else if (Config.sOpenLuckyMoneyCounts < 10) {
             return 500;
@@ -87,7 +88,7 @@ public class ConfigHelper {
     }
 
     public static int getOpenLuckyMoneyTime() {
-        if (Config.sOpenLuckyMoneyCounts < 3) {
+        if (Config.sOpenLuckyMoneyCounts < 3 || BuildConfig.IS_USER) {
             return Config.sTimeDelayPerformClickOpen;
         } else if (Config.sOpenLuckyMoneyCounts < 10) {
             if (Config.sTimeDelayPerformClickOpen < 500)
@@ -106,5 +107,13 @@ public class ConfigHelper {
         count.times = Config.sOpenLuckyMoneyCounts;
         count.timestamp = System.currentTimeMillis();
         PropertiesFileUtils.putObject(count);
+    }
+
+    public static void saveIdChatBack(String idChatBack) {
+        SharedPreferenceUtils.putString("idChatBack", idChatBack);
+    }
+
+    public static String getIdChatBack() {
+        return SharedPreferenceUtils.getString("idChatBack");
     }
 }

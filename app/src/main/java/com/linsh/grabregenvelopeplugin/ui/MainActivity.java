@@ -23,7 +23,6 @@ import com.linsh.utilseverywhere.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private TextView tvDelayOpenLuckyMoney;
     private SeekBar sbDelayOpenLuckyMoney;
     private TextView tvDelayExitLuckyMoneyDetail;
