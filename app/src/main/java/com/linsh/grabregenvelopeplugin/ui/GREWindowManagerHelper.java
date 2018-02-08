@@ -87,6 +87,7 @@ public class GREWindowManagerHelper {
                                     if (!string.contains(NotificationService.class.getName()) || !ServiceUtils.isRunning(NotificationService.class)) {
                                         ContextUtils.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
                                     }
+                                    removeSettingView();
                                 } else {
                                     ServiceUtils.stopService(NotificationService.class);
                                 }
