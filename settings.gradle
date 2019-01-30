@@ -1,17 +1,1 @@
 include ':app'
-
-include ':Utils-Everywhere'
-project(':Utils-Everywhere').projectDir = new File('../../sourcetree/LshLibrary/Utils-Everywhere/')
-include ':Utils-Everywhere:utils'
-
-include ':LshUtils'
-project(':LshUtils').projectDir = new File('../../sourcetree/LshLibrary/LshUtils/')
-include ':LshUtils:lshutils'
-
-include ':LshViews'
-project(':LshViews').projectDir = new File('../../sourcetree/LshLibrary/LshViews/')
-include ':LshViews:lshviews'
-
-include ':LearningInCode'
-project(':LearningInCode').projectDir = new File('../../sourcetree/LearningInCode')
-include ':LearningInCode:code'

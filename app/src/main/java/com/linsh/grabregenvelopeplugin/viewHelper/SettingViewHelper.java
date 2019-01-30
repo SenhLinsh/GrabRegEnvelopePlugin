@@ -64,19 +64,19 @@ public class SettingViewHelper implements View.OnClickListener {
                 mViewHelperListener.exit();
                 break;
             case R.id.tp_setting_focus_on_current_group:
-                mTpFocusOnCurGroup.detail().toggle();
+                mTpFocusOnCurGroup.detail().toggel();
                 mViewHelperListener.focusOnCurGroup(mTpFocusOnCurGroup.detail().isToggleOn());
                 break;
             case R.id.tp_setting_keep_light:
-                mTpKeepLight.detail().toggle();
+                mTpKeepLight.detail().toggel();
                 mViewHelperListener.keepLight(mTpKeepLight.detail().isToggleOn());
                 break;
             case R.id.tp_toggle_notification_service:
-                mTpToggleNotify.detail().toggle();
+                mTpToggleNotify.detail().toggel();
                 mViewHelperListener.toggleNotifyService(mTpToggleNotify.detail().isToggleOn());
                 break;
             case R.id.tp_check_open_lucky_money:
-                mTpCheckOpenLuckyMoney.detail().toggle();
+                mTpCheckOpenLuckyMoney.detail().toggel();
                 mViewHelperListener.checkOpenLuckyMoney(mTpCheckOpenLuckyMoney, mTpCheckOpenLuckyMoney.detail().isToggleOn());
                 break;
         }

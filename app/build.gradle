@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.linsh.grabregenvelopeplugin"
         minSdkVersion 18
@@ -11,9 +10,18 @@ android {
         versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            keyAlias 'linsh'
+            keyPassword '123456'
+            storeFile file('/keystore/SenhLinsh.keystore')
+            storePassword '123456'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -41,6 +49,9 @@ android {
             buildConfigField "boolean", "IS_USER", "false"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -52,8 +63,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //////////  个人
-    implementation project(':LshUtils:lshutils')
-    implementation project(':LshViews:lshviews')
+    implementation 'com.github.SenhLinsh:LshUtils:2.0.2'
+    implementation 'com.github.SenhLinsh:LshViews:1.0.2'
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
 }

@@ -25,6 +25,7 @@ public class FloatingViewHelper {
     public FloatingViewHelper(Context context) {
         mViewHelper = new WindowManagerViewHelper(context, R.layout.layout_floating_btn)
                 .setLocation(ScreenUtils.getScreenWidth() / 2, ScreenUtils.getScreenHeight() / 2)
+                .setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
                 .addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
